@@ -37,6 +37,7 @@ import org.springframework.util.StringUtils;
  * @author Stephane Nicoll
  * @author HaiTao Zhang
  * @author Chris Bono
+ * @author David Good
  * @since 2.0.0
  */
 public class Sanitizer {
@@ -49,7 +50,7 @@ public class Sanitizer {
 	private static final Set<String> URI_USERINFO_KEYS = new LinkedHashSet<>(
 			Arrays.asList("uri", "uris", "address", "addresses"));
 
-	private static final Pattern URI_USERINFO_PATTERN = Pattern.compile("[A-Za-z]+://.+:(.*)@.+$");
+	private static final Pattern URI_USERINFO_PATTERN = Pattern.compile("\\[?[A-Za-z]+://.+:(.*)@.+$");
 
 	private Pattern[] keysToSanitize;
 
@@ -82,7 +83,7 @@ public class Sanitizer {
 		if (isRegex(value)) {
 			return Pattern.compile(value, Pattern.CASE_INSENSITIVE);
 		}
-		return Pattern.compile(".*" + value + "$", Pattern.CASE_INSENSITIVE);
+		return Pattern.compile(".*" + value + "(?:\\[.+])?$", Pattern.CASE_INSENSITIVE);
 	}
 
 	private boolean isRegex(String value) {
